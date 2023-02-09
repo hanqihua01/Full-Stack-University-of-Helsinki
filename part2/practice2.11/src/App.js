@@ -77,14 +77,14 @@ const App = () => {
   const personsToShow = searchName === ''
     ? persons
     : persons.filter(person =>
-        person.name.toLowerCase().includes(searchName.toLowerCase())
-      )
+      person.name.toLowerCase().includes(searchName.toLowerCase())
+    )
 
   return (
     <div>
       <h2>Phonebook</h2>
       <Filter value={searchName} onChange={handleSearchName} />
-      
+
       <h3>Add a new</h3>
       <PersonForm onSubmit={handleSubmit}
         value1={newName} onChange1={handleNewName}

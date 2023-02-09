@@ -80,7 +80,7 @@ function App() {
   return (
     <div>
       <Search value={searchCountry} onChange={handleSearchCountry} />
-      <Countries countries={countriesToShow} setSearchCountry={setSearchCountry}  />
+      <Countries countries={countriesToShow} setSearchCountry={setSearchCountry} />
     </div>
   );
 }

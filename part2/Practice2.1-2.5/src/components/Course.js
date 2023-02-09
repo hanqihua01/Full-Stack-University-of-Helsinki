@@ -1,13 +1,13 @@
-const Course = ({course}) =>
-    <>
-      <Header name={course.name} />
-      <Content parts={course.parts} />
-    </>
+const Course = ({ course }) =>
+  <>
+    <Header name={course.name} />
+    <Content parts={course.parts} />
+  </>
 
-const Header = ({name}) =>
+const Header = ({ name }) =>
   <h2>{name}</h2>
 
-const Content = ({parts}) => {
+const Content = ({ parts }) => {
   const sum = parts.reduce((acc, cur) => {
     return acc + cur.exercises
   }, 0)
@@ -23,10 +23,10 @@ const Content = ({parts}) => {
   )
 }
 
-const Part = ({name, exercises}) =>
+const Part = ({ name, exercises }) =>
   <li>{name} {exercises}</li>
 
-const Sum = ({sum}) =>
+const Sum = ({ sum }) =>
   <p>total of {sum} exercises</p>
 
 export default Course
