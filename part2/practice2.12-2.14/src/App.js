@@ -11,31 +11,44 @@ const Search = (props) => {
   )
 }
 
+const Information = (props) => {
+  return (
+    <div>
+      <h1>{props.country.name.common}</h1>
+      <p>capital {props.country.capital[0]}</p>
+      <p>area {props.country.area}</p>
+      <h3>languages:</h3>
+      <ul>
+        {Object.values(props.country.languages).map(language =>
+          <li key={language}>{language}</li>
+        )}
+      </ul>
+      <img src={props.country.flags.png} alt="flag" />
+    </div>
+  )
+}
+
 const Countries = (props) => {
+  const handleShow = (commonName) => {
+    props.setSearchCountry(commonName)
+  }
+
   if (props.countries.length > 10) {
     return (<p>Too many matches, specify another filter</p>)
   } else if (props.countries.length > 1) {
     return (
       <ul>
         {props.countries.map(country =>
-          <li key={country.name.official}>{country.name.common}</li>
+          <li key={country.name.official}>
+            {country.name.common}
+            <button onClick={() => handleShow(country.name.common)}>show</button>
+          </li>
         )}
       </ul>
     )
   } else if (props.countries.length === 1) {
     return (
-      <div>
-        <h1>{props.countries[0].name.common}</h1>
-        <p>capital {props.countries[0].capital[0]}</p>
-        <p>area {props.countries[0].area}</p>
-        <h3>languages:</h3>
-        <ul>
-          {Object.values(props.countries[0].languages).map(language =>
-            <li key={language}>{language}</li>
-          )}
-        </ul>
-        <img src={props.countries[0].flags.png} />
-      </div>
+      <Information country={props.countries[0]} />
     )
   } else {
     return <p>No matches</p>
@@ -67,7 +80,7 @@ function App() {
   return (
     <div>
       <Search value={searchCountry} onChange={handleSearchCountry} />
-      <Countries countries={countriesToShow} />
+      <Countries countries={countriesToShow} setSearchCountry={setSearchCountry}  />
     </div>
   );
 }
