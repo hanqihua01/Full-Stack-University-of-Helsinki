@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useState, useEffect } from 'react'
+import personService from './services/persons'
 
 const Filter = (props) => {
   return (
@@ -24,7 +25,10 @@ const Persons = (props) => {
     <div>
       <ul>
         {props.personsToShow.map(person =>
-          <li key={person.name + person.number}>{person.name} {person.number}</li>
+          <li key={person.name + person.number}>
+            {person.name} {person.number}
+            <button onClick={() => props.handleDelete(person)}>delete</button>
+          </li>
         )}
       </ul>
     </div>
@@ -38,10 +42,10 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then(response => {
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
 
@@ -65,12 +69,31 @@ const App = () => {
       number: newNumber
     }
 
-    if (persons.findIndex(element => element.name === newObject.name && element.number === newObject.number) === -1) {
-      setPersons(persons.concat(newObject))
+    if (persons.findIndex(element => element.name === newObject.name) === -1) {
+      personService.create(newObject).then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+      })
       setNewName('')
       setNewNumber('')
     } else {
-      window.alert(`${newName} ${newNumber} is already added to phonebook`)
+      if (window.confirm(`${newObject.name} is already added to phonebook, replace the old number with a new one?`)) {
+        const toRenew = persons[persons.findIndex(element => element.name === newObject.name)]
+        personService
+          .renew(toRenew.id, newObject)
+          .then(returnedPerson => {
+            setPersons(persons.map(element =>
+              element.id !== toRenew.id ? element : returnedPerson
+            ))
+          })
+      }
+    }
+  }
+
+  const handleDelete = (person) => {
+    if (window.confirm(`Delete ${person.name} ?`)) {
+      personService.remove(person.id).then(response => {
+        personService.getAll().then(renewedPersons => setPersons(renewedPersons))
+      })
     }
   }
 
@@ -92,7 +115,7 @@ const App = () => {
       />
 
       <h3>Numbers</h3>
-      <Persons personsToShow={personsToShow} />
+      <Persons personsToShow={personsToShow} handleDelete={handleDelete} />
     </div>
   )
 }
