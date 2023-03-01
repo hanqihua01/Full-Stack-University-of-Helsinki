@@ -3,6 +3,7 @@ const express = require('express')
 const application = express()
 application.use(cors())
 application.use(express.json())
+application.use(express.static('build'))
 
 let notes = [
     {
