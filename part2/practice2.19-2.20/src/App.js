@@ -1,5 +1,3 @@
-import { getQueriesForElement } from '@testing-library/react'
-import axios from 'axios'
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 
