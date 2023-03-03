@@ -41,9 +41,18 @@ application.get('/api/notes', (request, response) => {
 
 application.get('/api/notes/:id', (request, response) => {
     const id = Number(request.params.id)
-    Note.findById(id).then(note => {
-        response.json(note)
-    })
+    Note.findById(id)
+        .then(note => {
+            if (note) {
+                response.json(note)
+            } else {
+                response.status(404).end()
+            }
+        })
+        .catch(error => {
+            console.log(error)
+            response.status(500).end()
+        })
 })
 
 application.delete('/api/notes/:id', (request, response) => {
