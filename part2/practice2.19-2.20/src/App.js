@@ -137,6 +137,7 @@ const App = () => {
   }
 
   const handleDelete = (person) => {
+    console.log(person)
     if (window.confirm(`Delete ${person.name} ?`)) {
       personService.remove(person.id).then(response => {
         personService.getAll().then(renewedPersons => setPersons(renewedPersons))

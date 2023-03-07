@@ -8,30 +8,9 @@ application.use(express.json())
 
 const Note = require('./models/note')
 
-let notes = [
-    {
-        id: 1,
-        content: "HTML is easy",
-        date: "2022-05-30T17:30:31.098Z",
-        important: true
-    },
-    {
-        id: 2,
-        content: "Browser can execute only Javascript",
-        date: "2022-05-30T18:39:34.091Z",
-        important: false
-    },
-    {
-        id: 3,
-        content: "GET and POST are the most important methods of HTTP protocol",
-        date: "2022-05-30T19:20:14.298Z",
-        important: true
-    }
-]
-
-application.get('/', (request, response) => {
-    response.send('<h1>Hello</n1>')
-})
+// application.get('/', (request, response) => {
+//     response.send('<h1>Hello</n1>')
+// })
 
 application.get('/api/notes', (request, response) => {
     Note.find({}).then(notes => {
@@ -40,7 +19,7 @@ application.get('/api/notes', (request, response) => {
 })
 
 application.get('/api/notes/:id', (request, response, next) => {
-    const id = Number(request.params.id)
+    const id = request.params.id
     Note.findById(id)
         .then(note => {
             if (note) {
@@ -53,7 +32,7 @@ application.get('/api/notes/:id', (request, response, next) => {
 })
 
 application.delete('/api/notes/:id', (request, response, next) => {
-    const id = Number(request.params.id)
+    const id = request.params.id
     Note.findByIdAndDelete(id)
         .then(result => {
             response.status(204).end()
