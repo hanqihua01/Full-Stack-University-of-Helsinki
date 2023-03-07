@@ -117,11 +117,15 @@ const App = () => {
     if (persons.findIndex(element => element.name === newObject.name) === -1) {
       personService.create(newObject).then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+        setMessage(`Added ${newObject.name}`)
+        setTimeout(() => {setMessage(null)}, 5000)
+      }).catch(error => {
+        console.log(error.response.data)
+        setErrorMessage(error.response.data.error)
+        setTimeout(() => setErrorMessage(null), 5000)
       })
-      setNewName('')
-      setNewNumber('')
-      setMessage(`Added ${newObject.name}`)
-      setTimeout(() => {setMessage(null)}, 5000)
     } else {
       if (window.confirm(`${newObject.name} is already added to phonebook, replace the old number with a new one?`)) {
         const toRenew = persons[persons.findIndex(element => element.name === newObject.name)]
