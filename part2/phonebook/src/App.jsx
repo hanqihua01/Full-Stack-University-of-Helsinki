@@ -2,6 +2,24 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import personService from './services/persons'
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className="notification">{message}</div>
+  )
+}
+
+const ErrorNotification = ({ errorMessage }) => {
+  if (errorMessage === null) {
+    return null
+  }
+  return (
+    <div className="errorNotification">{errorMessage}</div>
+  )
+}
+
 const Filter = ({ handleNameFilterChange }) => {
   return (
     <div>filter shown with <input onChange={handleNameFilterChange} /></div>
@@ -40,6 +58,9 @@ const App = () => {
     })
   }, [])
 
+  const [message, setMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
+
   const [nameFilter, setNameFilter] = useState('')
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
@@ -59,6 +80,10 @@ const App = () => {
         personService.update(updatedPerson.id, updatedPerson).then(returnedPerson => {
           setPersons(persons.map(person => person.id !== updatedPerson.id ? person : returnedPerson))
         })
+        setMessage(`Updated ${newName}`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
       }
     } else {
       const newPerson = {
@@ -69,6 +94,10 @@ const App = () => {
       personService.create(newPerson).then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
       })
+      setMessage(`Added ${newName}`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     }
     setNewName('')
     setNewNumber('')
@@ -87,6 +116,11 @@ const App = () => {
     if (window.confirm(`Delete ${personToDelete.name}?`)) {
       personService.erase(id).then(() => {
         setPersons(persons.filter(person => person.id !== id))
+      }).catch(error => {
+        setErrorMessage(`Information of ${personToDelete.name} has already been removed from server`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       })
     }
   }
@@ -94,6 +128,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
+      <ErrorNotification errorMessage={errorMessage} />
       <Filter handleNameFilterChange={handleNameFilterChange} />
       <h3>Add a new</h3>
       <PersonForm handlePersonSubmit={handlePersonSubmit} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
