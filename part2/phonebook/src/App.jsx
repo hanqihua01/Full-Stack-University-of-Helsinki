@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import personService from './services/persons'
 
 const Notification = ({ message }) => {
@@ -20,9 +19,9 @@ const ErrorNotification = ({ errorMessage }) => {
   )
 }
 
-const Filter = ({ handleNameFilterChange }) => {
+const Filter = ({ nameFilter, handleNameFilterChange }) => {
   return (
-    <div>filter shown with <input onChange={handleNameFilterChange} /></div>
+    <div>filter shown with <input value={nameFilter} onChange={handleNameFilterChange} /></div>
   )
 }
 
@@ -130,7 +129,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <Notification message={message} />
       <ErrorNotification errorMessage={errorMessage} />
-      <Filter handleNameFilterChange={handleNameFilterChange} />
+      <Filter nameFilter={nameFilter} handleNameFilterChange={handleNameFilterChange} />
       <h3>Add a new</h3>
       <PersonForm handlePersonSubmit={handlePersonSubmit} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
       <h3>Numbers</h3>
