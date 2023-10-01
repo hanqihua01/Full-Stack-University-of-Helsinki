@@ -39,3 +39,7 @@ Now, we can start the server by ```npm run dev```.
 ```
 npm install express
 ```
+### To avoid same origin policy, we need "cors"
+```
+npm install cors
+```
